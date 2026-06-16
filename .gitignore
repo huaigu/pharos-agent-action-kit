@@ -7,3 +7,6 @@ lib/
 .env
 .env.*
 *.key
+
+# smoke-script temp artifact
+scripts/DemoToken.sol
