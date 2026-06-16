@@ -75,7 +75,7 @@ Clone the repo and point your agent at whichever skill directory you need (or th
 repo):
 
 ```bash
-git clone https://github.com/<your-org>/pharos-agent-action-kit.git
+git clone https://github.com/0xLucas0x/pharos-agent-action-kit.git
 ```
 
 Then make the skills discoverable to your agent. For **Claude Code**, copy (or symlink)
@@ -155,7 +155,7 @@ forge build
 
 ## Project layout
 
-```
+```text
 pharos-agent-action-kit/
 ├── README.md
 ├── LICENSE                         # MIT
