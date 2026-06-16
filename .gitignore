@@ -1,0 +1,9 @@
+# Foundry
+out/
+cache/
+broadcast/**/dry-run/
+lib/
+# Secrets
+.env
+.env.*
+*.key
