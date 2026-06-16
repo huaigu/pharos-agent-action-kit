@@ -1,0 +1,10 @@
+[profile.default]
+src = "pharos-defi-play/assets/vault"
+out = "out"
+libs = []
+solc = "0.8.20"
+optimizer = true
+optimizer_runs = 200
+
+# The vault is a self-contained demo fixture (inline IERC20), so no remappings or
+# external libraries are needed. `forge build` compiles it as a compile-check.
