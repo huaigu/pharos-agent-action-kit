@@ -11,8 +11,8 @@ can read, transfer, deploy, and airdrop — but it cannot `approve`, read an
 stake, deposit) can take its first step. This kit adds that keystone primitive and
 the safe, multi-step plays built on it.
 
-> Built for the **Pharos Phase 1** hackathon (DoraHacks). Targets the Atlantic
-> testnet by default; mainnet is opt-in with explicit warnings.
+> Targets the Pharos Atlantic testnet by default; mainnet is opt-in with explicit
+> warnings.
 
 ---
 
@@ -239,7 +239,6 @@ pharos-agent-action-kit/
 ├── LICENSE                         # MIT
 ├── foundry.toml                    # compiles the MockVault fixture
 ├── scripts/smoke.sh                # end-to-end demo runner (safe without a key)
-├── docs/superpowers/specs/         # design spec
 ├── pharos-approvals/               # Skill 1 — keystone
 │   ├── SKILL.md
 │   ├── references/{approve,preflight}.md

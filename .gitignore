@@ -10,3 +10,6 @@ lib/
 
 # smoke-script temp artifact
 scripts/DemoToken.sol
+
+# local design scratch — not published
+docs/
