@@ -267,3 +267,7 @@ pharos-agent-action-kit/
 ## License
 
 [MIT](./LICENSE)
+
+## Contact
+
+Questions, feedback, or ideas — reach out on X: [@coder_chao](https://x.com/coder_chao)
