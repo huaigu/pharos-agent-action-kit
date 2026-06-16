@@ -45,6 +45,36 @@ to a reference file containing exact `cast` / `forge` command templates, paramet
 tables, output parsing, and error handling. The agent reads the relevant reference and
 runs the commands.
 
+```mermaid
+flowchart TB
+    user["User / AI Agent<br/>(natural language)"]
+
+    subgraph kit["Pharos Agent Action Kit — this repo"]
+        direction LR
+        A["<b>pharos-approvals</b><br/>approve · allowance<br/>revoke · transferFrom"]
+        P["<b>pharos-defi-play</b><br/>approve-then-call<br/>vault deposit / withdraw"]
+        G["<b>pharos-allowance-guard</b><br/>audit · flag<br/>batch-revoke"]
+    end
+
+    subgraph official["official pharos-skill-engine"]
+        direction LR
+        Q["query"]
+        T["transaction"]
+        C["contract / deploy"]
+    end
+
+    cast["Foundry — cast / forge"]
+    chain["Pharos chain<br/>atlantic-testnet · mainnet"]
+
+    user --> A & P & G
+    P -- "needs approval first" --> A
+    G -- "reuses revoke" --> A
+    kit -. "composes with (fills the missing approval layer)" .-> official
+    kit --> cast
+    official --> cast
+    cast --> chain
+```
+
 Two design rules tie the suite together and make it safe for autonomous use:
 
 1. **Preflight every write.** Before any `cast send`, the agent simulates the exact
@@ -57,6 +87,38 @@ Two design rules tie the suite together and make it safe for autonomous use:
 
 All three reuse the official engine's write pre-check protocol: private-key check →
 derive & confirm sender → confirm network (warn on mainnet) → preflight.
+
+### The approve-then-call play, step by step
+
+The core multi-step play, showing the preflight loop that lets it abort cleanly instead
+of stranding the user mid-sequence:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Ag as Agent
+    participant Tk as Token (ERC20)
+    participant Tg as Target (e.g. Vault)
+
+    Note over Ag: Pre-checks — key set? derive sender, confirm network
+
+    Ag->>Tk: cast call approve(spender, amount)  ·preflight·
+    alt preflight reverts
+        Tk-->>Ag: decoded revert reason
+        Note over Ag: STOP — do not broadcast
+    else preflight OK
+        Ag->>Tk: cast send approve(spender, amount)
+        Ag->>Tk: cast call allowance(owner, spender)  ·confirm·
+        Ag->>Tg: cast call method(...)  ·preflight vs post-approval state·
+        alt step-2 preflight reverts
+            Tg-->>Ag: decoded revert reason
+            Note over Ag: STOP + offer to revoke the step-1 allowance
+        else OK
+            Ag->>Tg: cast send method(...)
+            Tg-->>Ag: success → read back shares / staked balance
+        end
+    end
+```
 
 ---
 
