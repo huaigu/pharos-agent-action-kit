@@ -60,33 +60,49 @@ derive & confirm sender → confirm network (warn on mainnet) → preflight.
 
 ---
 
-## Requirements
-
-- [Foundry](https://book.getfoundry.sh/) (`cast` + `forge`) — the skills check for it
-  and provide install steps if missing.
-- `jq` and `python3` (used for network-config reads and decimal math in the templates).
-- A funded Pharos **testnet** key in `$PRIVATE_KEY` for write operations and the demo.
-
----
-
 ## Install
 
-Clone the repo and point your agent at whichever skill directory you need (or the whole
-repo):
+One command installs all three skills into every agent it detects — **Claude Code,
+Codex, OpenClaw, Hermes**, and 9 other runtimes (via [`vercel-labs/skills`](https://github.com/vercel-labs/skills)):
+
+```bash
+npx skills add 0xLucas0x/pharos-agent-action-kit -g -y
+```
+
+Want just one skill? Add `--skill`:
+
+```bash
+npx skills add 0xLucas0x/pharos-agent-action-kit --skill pharos-approvals -g -y
+```
+
+`-g` installs globally (per user); drop it for a project-local install. Then verify in a
+new session:
+
+| Agent | Skills directory | Verify |
+|-------|------------------|--------|
+| Claude Code | `~/.claude/skills/` | type `/skills` |
+| Codex | `~/.codex/skills/` | type `/skills` |
+| OpenClaw | `~/.openclaw/skills/` | `openclaw skills list` |
+| Hermes | `~/.hermes/skills/` | type `/skills` or `/pharos-approvals` |
+
+<details>
+<summary>Manual install (no CLI)</summary>
+
+Clone and copy the skill folders into your agent's skills directory:
 
 ```bash
 git clone https://github.com/0xLucas0x/pharos-agent-action-kit.git
+cp -r pharos-agent-action-kit/pharos-* ~/.claude/skills/   # or ~/.codex, ~/.openclaw, ~/.hermes ...
 ```
 
-Then make the skills discoverable to your agent. For **Claude Code**, copy (or symlink)
-the skill folders into your skills directory:
+</details>
 
-```bash
-cp -r pharos-approvals pharos-defi-play pharos-allowance-guard ~/.claude/skills/
-```
+### Prerequisites
 
-Each folder is a standalone skill — install one, two, or all three. They compose with
-the official `pharos-skill-engine` if you also have it installed.
+- [Foundry](https://book.getfoundry.sh/) (`cast` + `forge`) — the skills check for it
+  and print install steps if missing.
+- `jq` and `python3` — used for network-config reads and decimal math in the templates.
+- A funded Pharos **testnet** key in `$PRIVATE_KEY` for write operations and the demo.
 
 ---
 
